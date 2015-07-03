@@ -6,6 +6,6 @@
     <p><a href="AddPolicy">Add Policy</a><br>
     <p><a href="DeletePolicy">Delete Policy</a><br>
     <p><a href="monitor">Start Monitoring</a><br>
-    <p><a href="AddPolicy">Add new Book</a>       
+    <p><a href="AddBook.jsp">Add new Book</a>       
 </body>
 </html>
