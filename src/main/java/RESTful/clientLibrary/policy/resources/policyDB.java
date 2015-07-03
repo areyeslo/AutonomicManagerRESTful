@@ -157,6 +157,7 @@ public class policyDB {
 	 */
 	public boolean delete(int id) {
 		Connection c = null;
+		System.out.println("delete id :"+id);
 		c = accessDB();
 		if (c != null) {
 			try {
@@ -164,6 +165,7 @@ public class policyDB {
 				// Execute a query
 				stmt = c.createStatement();
 				String sql = "DELETE FROM POLICIES WHERE ID='"+ id +"';";
+				System.out.println(sql);
 				stmt.executeUpdate(sql);
 				c.commit();
 

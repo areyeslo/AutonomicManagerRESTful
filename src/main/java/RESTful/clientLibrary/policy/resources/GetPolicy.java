@@ -62,6 +62,9 @@ public class GetPolicy extends HttpServlet {
             System.out.println(policy.getId()+" "+policy.getMax_books()+", "+policy.getYear_book()+", "+policy.getActivate()+", ");
         }
 		
+		//Send List to the servlet that is calling
+		request.setAttribute("policies", policies);
+				
 		/*Display book list in the servlet*/
 		printWriter.println("<h1>List of Policies</h1>");
         

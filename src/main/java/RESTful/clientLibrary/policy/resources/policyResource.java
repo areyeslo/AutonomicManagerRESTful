@@ -38,6 +38,7 @@ public class policyResource {
 	@Path("/{policyID}")
 	@Produces(MediaType.APPLICATION_JSON)	
 	public String removeBook(@PathParam("policyID") int ID){
+		System.out.println("id :"+ID);
 		boolean removed= PolicyService.deletePolicy(ID);
 		String answer="Removed successfully";
 		if(removed = false){

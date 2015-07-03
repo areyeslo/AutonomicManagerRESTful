@@ -28,6 +28,7 @@ public class policyService {
 	}
 	
 	public boolean deletePolicy(int id){
+		System.out.println("deletePolicy id :"+id);
 		return PolicyStore.delete(id);
 	}
 
