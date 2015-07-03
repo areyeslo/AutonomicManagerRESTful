@@ -13,6 +13,7 @@ import java.util.List;
 import RESTful.clientLibrary.policy.model.*;
 
 public class policyDB {
+	
 	public policyDB() {
 		Connection c = null;
 		c = accessDB();
@@ -34,7 +35,7 @@ public class policyDB {
 						"(ID INTEGER PRIMARY KEY   AUTOINCREMENT   NOT NULL," +
 						" MAX_BOOKS   INT  NOT NULL UNIQUE," +
 						" YEAR_BOOK   INT  NOT NULL,"+
-						" ACTIVATE    BOOLEAN  NOT NULL);"; 
+						" ACTIVATE    INT  NOT NULL);"; 
 				stmt.executeUpdate(sql);
 				stmt.close();
 				c.close();
@@ -54,7 +55,6 @@ public class policyDB {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
-			//c = DriverManager.getConnection("jdbc:sqlite:library.db");
 			System.out.println("Access Granted.");	    
 		} catch (Exception e) {
 			// Handle errors for Class.forName and handle errors for JDBC
@@ -80,7 +80,7 @@ public class policyDB {
 					int id = rs.getInt("id");
 					int  max_books = rs.getInt("max_books");
 					int  year_book  = rs.getInt("year_book");
-					boolean activate = rs.getBoolean("activate");
+					int activate = rs.getInt("activate");
 					Policy p= new Policy(id,max_books,year_book,activate); 
 					//add the record into the list
 					results.add(p);
@@ -105,19 +105,21 @@ public class policyDB {
 	 * @param args activate
 	 * @return  
 	 */
-	public int put(int max_books, int year_book, boolean activate) throws Exception {
+	public int put(int max_books, int year_book, int activate) throws Exception {
 		Connection c = null;
 		Statement stmt = null;
 		int lastID = 0;
 		int insert = 0;
 		c = accessDB();
+		
 		if (c != null) {
 			try {
 				c.setAutoCommit(false);
-
+				
 				// Execute a query
 				stmt = c.createStatement();
-				String sql = "INSERT OR REPLACE INTO POLICIES (MAX_BOOKS,YEAR,ACTIVATE) VALUES ( '"+ max_books +"', '" + year_book + "', '" + activate + "' );"; 
+								
+				String sql = "INSERT OR REPLACE INTO POLICIES (MAX_BOOKS,YEAR_BOOK,ACTIVATE) VALUES ( '"+ max_books +"', '" + year_book + "', '" + activate + "' );";
 				insert = stmt.executeUpdate(sql);
 				
 				ResultSet rs = null;
@@ -127,7 +129,6 @@ public class policyDB {
                 } else {
                     System.out.println("can't find most recent insert we just entered!");
                 }
-				
 			} catch ( Exception e ) {
 				// Handle errors for Class.forName and handle errors for JDBC
 				if (e.getMessage().contains("UNIQUE")) 

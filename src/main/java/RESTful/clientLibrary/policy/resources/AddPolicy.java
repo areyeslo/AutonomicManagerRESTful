@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
+import RESTful.clientLibrary.policy.model.DataObject;
 import RESTful.clientLibrary.policy.model.Policy;
 
 import com.google.gson.Gson;
@@ -78,7 +79,54 @@ public class AddPolicy extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+//		doGet(request, response);
+		// extract form data
+		int maxBooks = Integer.parseInt(request.getParameter("maxBooks"));
+		int yearBook = Integer.parseInt(request.getParameter("yearBook"));
+		String strActivate = request.getParameter("activate");
+		System.out.print(strActivate);
+		int activate = 1;
+		if (strActivate == null)
+			activate = 0;
+
+		Policy policy = new Policy(0, maxBooks, yearBook, activate);
+		Gson gson = new Gson();
+		String jsonString = gson.toJson(policy);
+		System.out.println(jsonString);
+
+		Client client = Client.create();
+
+		WebResource webResource = client.resource("http://localhost:8080/clientLibrary/webapi/policy");
+
+		// POST method
+		ClientResponse rs = webResource.accept("application/json")
+				.type("application/json").post(ClientResponse.class, jsonString);
+
+		// check response status code
+		if (rs.getStatus() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ rs.getStatus());
+		}
+		// display response
+		String output = rs.getEntity(String.class);
+		System.out.println("Output from Server .... ");
+		System.out.println(output + "\n");
+
+		PrintWriter printWriter = response.getWriter();
+		printWriter.println("<h1>The new policy is added!</h1>");
+
+		if (rs.getStatus() != 200){
+			printWriter.println("<html><body>Sorry, Failed : HTTP error code :"+rs.getStatus()+"<br>");
+		}else{
+			policy = gson.fromJson(output, Policy.class);
+
+			printWriter.println("<html><body><br>");
+			printWriter.println("ID: "+policy.getId()+"<br>"+"Max Books: "+policy.getMax_books()+"<br>"+
+					"Year: "+policy.getYear_book()+"<br>"+"Active: "+policy.getActivate()+"<br>"+ 
+					"<br><br>");
+		}
+		printWriter.println("</body></html>");
+		printWriter.print("<a href=\"index.jsp\">Back</a>");
 	}
 
 }

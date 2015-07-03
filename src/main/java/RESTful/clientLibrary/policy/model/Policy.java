@@ -6,17 +6,17 @@ public class Policy {
 	private int id;
 	private int max_books;
 	private int year_book;
-	private boolean activate;
+	private int activate;
 	
 	public Policy(){
 		
 	}
 	
-	public Policy(int id, int max_books, int year_book,boolean activate){
+	public Policy(int id, int max_books, int year_book,int activate){
 		this.id=id;
 		this.max_books=max_books;
 		this.year_book=year_book;
-		this.activate=activate;
+		this.activate = activate;
 	}
 
 	public int getId() {
@@ -44,11 +44,11 @@ public class Policy {
 	}
 
 	
-	public boolean getActivate() {
+	public int getActivate() {
 		return activate;
 	}
 
-	public void setActivate(boolean activate) {
+	public void setActivate(int activate) {
 		this.activate = activate;
 	}
 }

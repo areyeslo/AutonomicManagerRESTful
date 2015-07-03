@@ -49,6 +49,7 @@ public class policyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Policy addPolicy(Policy policy) {
+		
 		if (policy != null) 
 			return PolicyService.addPolicy(policy);
 		return null;
