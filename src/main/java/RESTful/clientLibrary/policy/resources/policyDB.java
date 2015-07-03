@@ -13,7 +13,7 @@ import java.util.List;
 import RESTful.clientLibrary.policy.model.*;
 
 public class policyDB {
-	public void CreateDB() {
+	public policyDB() {
 		Connection c = null;
 		c = accessDB();
 		if (c != null) {
@@ -53,7 +53,7 @@ public class policyDB {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\clientLibrary\\policy.db");
+			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
 			//c = DriverManager.getConnection("jdbc:sqlite:library.db");
 			System.out.println("Access Granted.");	    
 		} catch (Exception e) {
