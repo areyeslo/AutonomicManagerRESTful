@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
-import RESTful.clientLibrary.policy.model.DataObject;
 import RESTful.clientLibrary.policy.model.Policy;
 
 import com.google.gson.Gson;
