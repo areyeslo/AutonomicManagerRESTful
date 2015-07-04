@@ -53,8 +53,8 @@ public class policyDB {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\policy.db");
-			//c = DriverManager.getConnection("jdbc:sqlite:C:\\Program Files (x86)\\eclipse-classic-kepler-M6-win32\\eclipse\\policy.db");
+//			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\policy.db");
+			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
 			System.out.println("Access Granted."); 
 			
 		} catch (Exception e) {
@@ -190,7 +190,6 @@ public class policyDB {
 	 */
 	public boolean delete(int id) {
 		Connection c = null;
-		System.out.println("delete id :"+id);
 		c = accessDB();
 		if (c != null) {
 			try {
@@ -198,7 +197,6 @@ public class policyDB {
 				// Execute a query
 				stmt = c.createStatement();
 				String sql = "DELETE FROM POLICIES WHERE ID='"+ id +"';";
-				System.out.println(sql);
 				stmt.executeUpdate(sql);
 				c.commit();
 

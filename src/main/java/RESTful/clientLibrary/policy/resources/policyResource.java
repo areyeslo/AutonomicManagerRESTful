@@ -49,12 +49,11 @@ public class policyResource {
 	@DELETE
 	@Path("/{policyID}")
 	@Produces(MediaType.APPLICATION_JSON)	
-	public String removeBook(@PathParam("policyID") int ID){
-		System.out.println("id :"+ID);
-		boolean removed= PolicyService.deletePolicy(ID);
-		String answer="Removed successfully";
+	public String removeBook(@PathParam("policyID") int ID) {
+		boolean removed = PolicyService.deletePolicy(ID);
+		String answer = "Removed successfully";
 		if(removed = false){
-			answer="Not removed";
+			answer = "Not removed";
 		}
 		return answer;
 	}

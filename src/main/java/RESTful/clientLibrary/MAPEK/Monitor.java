@@ -44,9 +44,9 @@ public class Monitor extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter printWriter = response.getWriter();
 		
-		/* I set up this dummy value, but I have to receive from 
-		 * the previous servlet (add a book) built by Babak*/
-		String year="2010";
+		String year = request.getParameter("year") ;
+		if (year == null)
+			year = "2010";
 		
 		Client client= Client.create();
 		WebResource webResource= client.resource("http://localhost:8080/library/webapi/books/year/" + year);
@@ -100,13 +100,13 @@ public class Monitor extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		// extract form data
 		String bookName = request.getParameter("name");
 		String authorName = request.getParameter("author");
 		String yearBook = request.getParameter("year");
 		String publisherBook = request.getParameter("publisher");
-		
+
+		doGet(request, response);
 
 		DataObject obj = new DataObject(bookName, authorName, yearBook, publisherBook);
 		Gson gson = new Gson();

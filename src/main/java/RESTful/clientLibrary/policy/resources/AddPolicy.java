@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
-import RESTful.clientLibrary.policy.model.DataObject;
 import RESTful.clientLibrary.policy.model.Policy;
 
 import com.google.gson.Gson;
@@ -37,7 +36,7 @@ public class AddPolicy extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+				
 		PrintWriter printWriter = response.getWriter();
 
 		Client client= Client.create();

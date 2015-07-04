@@ -3,7 +3,6 @@ package RESTful.clientLibrary.MAPEK;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +14,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import RESTful.clientLibrary.policy.model.Book;
-import RESTful.clientLibrary.policy.model.NumberBooks;
 import RESTful.clientLibrary.policy.model.Policy;
 
 /**
