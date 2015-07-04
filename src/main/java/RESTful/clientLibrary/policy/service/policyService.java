@@ -2,6 +2,7 @@ package RESTful.clientLibrary.policy.service;
 import RESTful.clientLibrary.policy.resources.*;
 import RESTful.clientLibrary.policy.model.*;
 
+
 import java.util.List;
 
 public class policyService {
@@ -15,6 +16,11 @@ public class policyService {
         }
 		return allPolicies;		
 	}
+	
+	public Policy getPolicyByYear(int year){
+		return PolicyStore.queryByYear(year);
+	}
+	
 	
 	public Policy addPolicy(Policy policy) {
 		try {

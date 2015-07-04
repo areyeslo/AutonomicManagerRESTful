@@ -15,6 +15,7 @@ import RESTful.clientLibrary.policy.model.Policy;
 import RESTful.clientLibrary.policy.service.policyService;
 
 
+
 /** This class will implement all the request on the resource: 
  * GET
  * PUT
@@ -33,6 +34,17 @@ public class policyResource {
 		List<Policy> books = PolicyService.getAllPolicies();		
 		return books;
 	}
+
+	
+	@GET
+	@Path("/year/{year}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Policy getPolicyByYear(@PathParam("year") int year){
+		return PolicyService.getPolicyByYear(year);
+		
+	}
+	
+		
 	
 	@DELETE
 	@Path("/{policyID}")
@@ -46,6 +58,9 @@ public class policyResource {
 		}
 		return answer;
 	}
+	
+
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import RESTful.clientLibrary.policy.model.*;
@@ -54,8 +53,10 @@ public class policyDB {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
-			System.out.println("Access Granted.");	    
+			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\policy.db");
+			//c = DriverManager.getConnection("jdbc:sqlite:C:\\Program Files (x86)\\eclipse-classic-kepler-M6-win32\\eclipse\\policy.db");
+			System.out.println("Access Granted.");	 
+			System.out.println("Access Granted. ");
 		} catch (Exception e) {
 			// Handle errors for Class.forName and handle errors for JDBC
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );	      
@@ -95,6 +96,38 @@ public class policyDB {
 			}
 		}  
 		return results;
+
+	}
+	
+	public Policy queryByYear(int year){
+		Policy policy= new Policy();
+		Connection c = null; 
+		c = accessDB();
+		if (c != null){
+			try{
+				ResultSet rs=null;				 
+				Statement stmt = c.createStatement();
+				rs = stmt.executeQuery( "SELECT id,max_books,year_book,activate FROM POLICIES WHERE year_book="+year+";" );
+				while ( rs.next() ) {
+					//Get record from cursor
+					int id = rs.getInt("id");
+					policy.setId(id);
+					int  max_books = rs.getInt("max_books");
+					policy.setMax_books(max_books);
+					int  year_book  = rs.getInt("year_book");
+					policy.setYear_book(year_book);
+					int activate = rs.getInt("activate");
+					policy.setActivate(activate);
+				}
+				rs.close();
+				stmt.close();
+				c.close();
+			}catch ( Exception e ) {
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				System.exit(0);
+			}
+		}  
+		return policy;
 
 	}
 	

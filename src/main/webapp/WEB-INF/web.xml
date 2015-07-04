@@ -55,4 +55,14 @@
     <servlet-name>DeletePolicy</servlet-name>
     <url-pattern>/DeletePolicy</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Analyzer</display-name>
+    <servlet-name>Analyzer</servlet-name>
+    <servlet-class>RESTful.clientLibrary.MAPEK.Analyzer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Analyzer</servlet-name>
+    <url-pattern>/Analyzer</url-pattern>
+  </servlet-mapping>
 </web-app>

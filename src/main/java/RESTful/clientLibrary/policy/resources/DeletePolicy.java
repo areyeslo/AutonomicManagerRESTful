@@ -2,7 +2,6 @@ package RESTful.clientLibrary.policy.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -10,12 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MediaType;
 
-import RESTful.clientLibrary.policy.model.DeleteObject;
 import RESTful.clientLibrary.policy.model.Policy;
 
-import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -64,69 +60,40 @@ public class DeletePolicy extends HttpServlet {
 
         RequestDispatcher rd2 = getServletConfig().getServletContext().getRequestDispatcher("/showRecordsToDelete.jsp");
         rd2.include(request,response);
-        
-        
+                
 		//Receive the answer
 		printWriter.print("I am comming back from showRecordsToDelete.jsp");
 		
 		String policyID = request.getParameter("id");
-//		String input = "{\"id\":\"" + policyID +"\"}";
-		DeleteObject delObj = new DeleteObject(policyID);
-		Gson gson = new Gson();
-		String jsonString = gson.toJson(delObj);
-		System.out.println(jsonString);
-		
+				
 		printWriter.print("I will delete id: " + policyID);
 		
 		//Delete the choose policy
-		/*ClientResponse rs=webResource.accept(
-		           MediaType.APPLICATION_JSON_TYPE,
-		           MediaType.APPLICATION_XML_TYPE).
-		           delete(ClientResponse.class,input);*/
-		ClientResponse rs = webResource.accept("application/json")
-				.type("application/json").delete(ClientResponse.class, jsonString);
-		
-		//Receive the answer and provide status to user
-		printWriter.print("Delete a policy");
-		
-		/*response.setContentType("text/html");
-		PrintWriter printWriter = response.getWriter();
-		
-		Client client= Client.create();
-		WebResource webResource= client.resource("http://localhost:8080/clientLibrary/webapi/policy");
-		
-		//create an object of RequestDispatcher 
-		RequestDispatcher rd = request.getRequestDispatcher("GetPolicy"); 
-		
-		// send the client data available with req of delete to req of getPolicy with include() 
-		rd.include(request, response);
-		
-		
-		//GetPolicy policy = new GetPolicy();
-		//List<Policy> policies= policy.service(request,response);
-			
-
-		//printWriter.print(policies);
-		
-		for(Policy policy : policies) {
-            System.out.println(policy.getId()+" "+policy.getMax_books()+", "+policy.getYear_book()+", "+policy.getActivate()+", ");
-        }
-		
-		printWriter.print("I am comming back in Delete to send a request to Delete method");
-		
-		ClientResponse rs=webResource.accept(
-		           MediaType.APPLICATION_JSON_TYPE,
-		           MediaType.APPLICATION_XML_TYPE).
-		           delete(ClientResponse.class,input);
-		
-		printWriter.print("Delete a policy");*/
+		doDelete(request, response);
+		printWriter.print("Delete a policy"+"<br>"+"<br>");
+		printWriter.print("<a href=\"index.jsp\">Back</a>");
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		System.out.print("Delete post");
 	}
 
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String policyID = request.getParameter("id");
+		if (policyID == null) return;
+		
+		Client client= Client.create();
+		WebResource webResource= client.resource("http://localhost:8080/clientLibrary/webapi/policy/"+policyID);
+
+		ClientResponse rs = webResource.accept("application/json")
+				.type("application/json").delete(ClientResponse.class);
+		
+		// display response
+		String output = rs.getEntity(String.class);
+		System.out.println("Output from Server .... ");
+		System.out.println(output + "\n");
+	}
 }

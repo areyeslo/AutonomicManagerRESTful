@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,8 +44,14 @@ public class Monitor extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter printWriter = response.getWriter();
 		
+		/* I set up this dummy value, but I have to receive from 
+		 * the previous servlet (add a book) built by Babak*/
+		String year="2010";
+		
 		Client client= Client.create();
-		WebResource webResource= client.resource("http://localhost:8080/library/webapi/books");
+		WebResource webResource= client.resource("http://localhost:8080/library/webapi/books/year/" + year);
+		
+		printWriter.print("I entered to doGet");
 		
 		ClientResponse rs=webResource.accept(
 				           MediaType.APPLICATION_JSON_TYPE,
@@ -60,6 +67,18 @@ public class Monitor extends HttpServlet {
 		for(Book book : books) {
             System.out.println(book.getId()+" "+book.getName()+", "+book.getAuthor()+", "+book.getAuthor()+", "+ book.getYear());
         }
+		
+		Integer size = books.size();
+		String sizeList=size.toString();
+		
+		
+		printWriter.print("The size list is: "+sizeList);
+		
+		request.setAttribute("sizeList",sizeList);
+		request.setAttribute("year",year);
+		RequestDispatcher rd = request.getRequestDispatcher("/Analyzer");
+		rd.forward(request,response);
+		
 		
 		/*Display book list in the servlet*/
 		printWriter.println("<h1>List of books in the Library</h1>");
@@ -81,11 +100,13 @@ public class Monitor extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		// extract form data
 		String bookName = request.getParameter("name");
 		String authorName = request.getParameter("author");
 		String yearBook = request.getParameter("year");
 		String publisherBook = request.getParameter("publisher");
+		
 
 		DataObject obj = new DataObject(bookName, authorName, yearBook, publisherBook);
 		Gson gson = new Gson();
