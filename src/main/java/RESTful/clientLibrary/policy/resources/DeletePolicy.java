@@ -49,28 +49,20 @@ public class DeletePolicy extends HttpServlet {
 		
 		List<Policy> policies = (List<Policy>) request.getAttribute("policies");
 		
-		/*printWriter.print("List of policies in Delete: ");
-		
-		for(Policy policy : policies) {
-             printWriter.println("<li>"+"ID: "+policy.getId()+"<br>"+"Max Number of Books: "+policy.getMax_books()+"<br>"+"Year of Book: "+policy.getYear_book()+"<br>"+"Activated: "+policy.getActivate()+"<br></li><br>");
-         }*/
-		
-		//Show to the user the possible options to delete using radio button
-		request.setAttribute("policies", policies);
+		if (!policies.isEmpty()){		
+			//Show to the user the possible options to delete using radio button
+			request.setAttribute("policies", policies);
 
-        RequestDispatcher rd2 = getServletConfig().getServletContext().getRequestDispatcher("/showRecordsToDelete.jsp");
-        rd2.include(request,response);
+        	RequestDispatcher rd2 = getServletConfig().getServletContext().getRequestDispatcher("/showRecordsToDelete.jsp");
+        	rd2.include(request,response);
                 
-		//Receive the answer
-		//printWriter.print("I am comming back from showRecordsToDelete.jsp");
-		
-		String policyID = request.getParameter("id");
+        	//Receive the answer
+        	String policyID = request.getParameter("id");
 				
-		//printWriter.print("I will delete id: " + policyID);
+        	//Delete the choose policy
+        	doDelete(request, response);
 		
-		//Delete the choose policy
-		doDelete(request, response);
-		//printWriter.print("Delete a policy"+"<br>"+"<br>");
+		}
 		printWriter.print("<a href=\"index.jsp\">Back</a>");
 	}
 
@@ -82,6 +74,9 @@ public class DeletePolicy extends HttpServlet {
 	}
 
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter printWriter = response.getWriter();  
+		response.setContentType("text/html");
+				
 		String policyID = request.getParameter("id");
 		if (policyID == null) return;
 		
@@ -91,9 +86,18 @@ public class DeletePolicy extends HttpServlet {
 		ClientResponse rs = webResource.accept("application/json")
 				.type("application/json").delete(ClientResponse.class);
 		
+		// check response status code
+		if (rs.getStatus() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ rs.getStatus());
+		}
+		
 		// display response
 		String output = rs.getEntity(String.class);
-		System.out.println("Output from Server .... ");
-		System.out.println(output + "\n");
+		
+		printWriter.println("<script type=\"text/javascript\">");  
+		printWriter.println("alert('Policy is deleted!');");  
+		printWriter.println("</script>");
+		
 	}
 }

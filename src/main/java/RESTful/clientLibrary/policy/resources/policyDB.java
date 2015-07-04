@@ -53,8 +53,8 @@ public class policyDB {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-//			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\policy.db");
-			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
+			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\policy.db");
+//			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
 			System.out.println("Access Granted."); 
 			
 		} catch (Exception e) {

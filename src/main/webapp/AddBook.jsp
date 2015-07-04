@@ -7,20 +7,17 @@
 <title>Add a Book</title>
 </head>
 <body>
-	<br />
-	<br />
-	<br />
+	<h1>Add a Book</h1>
 	<form action="monitor" method="Get">
-		Name:   <input type="text" name="name"/>
+		Name:   <input type="text" name="name" />
 		<br /><br />
-		Author: <input type="text" name="author"/>
+		Author: <input type="text" name="author" />
 		<br /><br />
-		Year: <input type="text" name="year"/>
+		Year: <input type="text" name="year" />
 		<br /><br />
-		Publisher: <input type="text" name="publisher"/>
+		Publisher: <input type="text" name="publisher" />
 		<br /><br />
  		<input type="submit" value="Post"/>  
-
 	</form>
 </body>
 </html>

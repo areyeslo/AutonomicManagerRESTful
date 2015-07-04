@@ -4,12 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Delete a Policy</title>
 </head>
 <body>
-	<p>Write the ID you would like to delete:</p>
+	<h3>Write the ID would you like to delete:</h3>
 	<form action="DeletePolicy">
-		<input type="text" name="id" /><br> <input type="submit"
+		<input type="text" name="id" /><br><br> <input type="submit"
 			value="submit">
 	</form>
 </body>

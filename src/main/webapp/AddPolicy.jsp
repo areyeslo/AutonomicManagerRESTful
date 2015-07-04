@@ -7,8 +7,8 @@
 <title>Add Policy</title>
 </head>
 <body>
+	<h1>Add a Policy</h1>
 	<form action="AddPolicy" method="POST" target="_blank">
-		<br />
 		<br />
 		Maximum Number of Books: <input type="text" name="maxBooks">
 		<br />

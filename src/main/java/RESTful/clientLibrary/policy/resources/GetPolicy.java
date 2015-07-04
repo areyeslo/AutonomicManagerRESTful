@@ -70,7 +70,7 @@ public class GetPolicy extends HttpServlet {
         if (policies.isEmpty()){
         	printWriter.println("<html><body>Sorry, we don't have any policy. Create a new one."+"<br>");
         }else{
-        	printWriter.println("<html><body>The complete list of policies: <br>");
+        	//printWriter.println("<html><body>The complete list of policies: <br>");
             printWriter.println("<ul>");
             for(Policy policy : policies) {
                 printWriter.println("<li>"+"ID: "+policy.getId()+"<br>"+"Max Number of Books: "+policy.getMax_books()+"<br>"+"Year of Book: "+policy.getYear_book()+"<br>"+"Activated: "+policy.getActivate()+"<br></li><br>");
