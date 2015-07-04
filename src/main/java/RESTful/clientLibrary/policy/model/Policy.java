@@ -1,6 +1,5 @@
 package RESTful.clientLibrary.policy.model;
 
-import java.util.Date;
 
 public class Policy {
 	private int id;
