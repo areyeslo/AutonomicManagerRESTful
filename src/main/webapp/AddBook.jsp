@@ -10,7 +10,7 @@
 	<br />
 	<br />
 	<br />
-	<form action="monitor" method="Post">
+	<form action="monitor" method="Get">
 		Name:   <input type="text" name="name"/>
 		<br /><br />
 		Author: <input type="text" name="author"/>

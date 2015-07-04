@@ -37,8 +37,8 @@ public class Analyzer extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		PrintWriter printWriter = response.getWriter();
-		int overLimit=0;
-		
+		int overLimit = 0;
+
 		String numberBooks = (String) request.getAttribute("sizeList");
 		String year= (String)request.getAttribute("year");
 		//printWriter.print("The number of books by year is: " + numberBooks);
@@ -71,15 +71,14 @@ public class Analyzer extends HttpServlet {
 			printWriter.println("There is no more space for books. Delete one book for the same year.");
 			printWriter.println("The overLimit value is: "+overLimit);
 		}
+		
 		/*Sending the value overLimit to planner
 		 * overLimit=0 , we can insert the book
 		 * overLimit=1 , there is no more space for the book
 		 */
-		/*
+		System.out.println("Go to Planner");
 		request.setAttribute("overLimit",overLimit);
-		RequestDispatcher rd = request.getRequestDispatcher("/Planer");
-		rd.forward(request,response);*/
-		
+		request.getRequestDispatcher("/Planner").forward(request,response);
 	}
 
 	/**

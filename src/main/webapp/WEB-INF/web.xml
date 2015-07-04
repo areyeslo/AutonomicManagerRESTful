@@ -65,4 +65,24 @@
     <servlet-name>Analyzer</servlet-name>
     <url-pattern>/Analyzer</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Planner</display-name>
+    <servlet-name>Planner</servlet-name>
+    <servlet-class>RESTful.clientLibrary.MAPEK.Planner</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Planner</servlet-name>
+    <url-pattern>/Planner</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Executer</display-name>
+    <servlet-name>Executer</servlet-name>
+    <servlet-class>RESTful.clientLibrary.MAPEK.Executer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Executer</servlet-name>
+    <url-pattern>/Executer</url-pattern>
+  </servlet-mapping>
 </web-app>
