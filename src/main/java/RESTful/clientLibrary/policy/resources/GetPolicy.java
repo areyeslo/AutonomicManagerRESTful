@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
+import RESTful.clientLibrary.policy.model.Book;
 import RESTful.clientLibrary.policy.model.Policy;
 
 import com.google.gson.Gson;
@@ -42,7 +43,7 @@ public class GetPolicy extends HttpServlet {
 		Client client= Client.create();
 		WebResource webResource= client.resource("http://localhost:8080/clientLibrary/webapi/policy");
 		
-		printWriter.println("<u>Searching for current policies...</u><br>");
+		//printWriter.println("<u>Searching for current policies...</u><br>");
 		
 		ClientResponse rs=webResource.accept(
 		           MediaType.APPLICATION_JSON_TYPE,
@@ -68,7 +69,7 @@ public class GetPolicy extends HttpServlet {
 		printWriter.println("<h1>List of Policies</h1>");
         
         if (policies.isEmpty()){
-        	printWriter.println("<html><body>Sorry, we did not have any policy"+"<br>");
+        	printWriter.println("<html><body>Sorry, we don't have any policy. Create a new one."+"<br>");
         }else{
         	printWriter.println("<html><body>The complete list of policies: <br>");
             printWriter.println("<ul>");

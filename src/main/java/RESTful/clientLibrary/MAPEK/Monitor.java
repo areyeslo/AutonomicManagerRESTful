@@ -73,8 +73,8 @@ public class Monitor extends HttpServlet {
 		
 		
 		printWriter.print("The size list is: "+sizeList);
-		
 		request.setAttribute("sizeList",sizeList);
+		
 		request.setAttribute("year",year);
 		RequestDispatcher rd = request.getRequestDispatcher("/Analyzer");
 		rd.forward(request,response);

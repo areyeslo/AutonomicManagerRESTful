@@ -62,10 +62,11 @@ public class Analyzer extends HttpServlet {
 		printWriter.println("<li>"+"ID: "+policy.getId()+"<br>"+"Max Number of Books: "+policy.getMax_books()+"<br>"+"Year of Book: "+policy.getYear_book()+"<br>"+"Activated: "+policy.getActivate()+"<br></li><br>");
 		//Go to DataBase Policy and query the year and the number of books
 		
+		int activate=policy.getActivate();
 		int maxBooks=Integer.parseInt(numberBooks);				
 		int maxBooksPolicy= policy.getMax_books();
 		
-		if (maxBooks<maxBooksPolicy){
+		if (maxBooks<maxBooksPolicy || activate ==0 ){
 			overLimit=0;
 			printWriter.println("There are space for one more book. The overLimit value is: "+ overLimit );
 		}else{

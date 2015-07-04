@@ -7,22 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>Select a policy to be deleted:</h2>
-	<table>
-		<%-- JSTL foreach to loop a list retrieve from a servlet(DeletePolicy.java) in jsp --%>
-		<c:forEach items="${policies}" var="policy">
-			<tr>
-				<td>ID:</td>
-				<td><c:out value="${policy.id}" /></td>
-				<td>Maximum books:</td>
-				<td><c:out value="${policy.max_books}" /></td>
-				<td>Year of Book:</td>
-				<td><c:out value="${policy.year_book}" /></td>
-				<td>Activated:</td>
-				<td><c:out value="${policy.activate}" /></td>
-			</tr>
-		</c:forEach>
-	</table>
 	<p>Write the ID you would like to delete:</p>
 	<form action="DeletePolicy">
 		<input type="text" name="id" /><br> <input type="submit"

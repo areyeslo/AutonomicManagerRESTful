@@ -49,11 +49,11 @@ public class DeletePolicy extends HttpServlet {
 		
 		List<Policy> policies = (List<Policy>) request.getAttribute("policies");
 		
-		printWriter.print("List of policies in Delete: ");
+		/*printWriter.print("List of policies in Delete: ");
 		
 		for(Policy policy : policies) {
              printWriter.println("<li>"+"ID: "+policy.getId()+"<br>"+"Max Number of Books: "+policy.getMax_books()+"<br>"+"Year of Book: "+policy.getYear_book()+"<br>"+"Activated: "+policy.getActivate()+"<br></li><br>");
-         }
+         }*/
 		
 		//Show to the user the possible options to delete using radio button
 		request.setAttribute("policies", policies);
@@ -62,15 +62,15 @@ public class DeletePolicy extends HttpServlet {
         rd2.include(request,response);
                 
 		//Receive the answer
-		printWriter.print("I am comming back from showRecordsToDelete.jsp");
+		//printWriter.print("I am comming back from showRecordsToDelete.jsp");
 		
 		String policyID = request.getParameter("id");
 				
-		printWriter.print("I will delete id: " + policyID);
+		//printWriter.print("I will delete id: " + policyID);
 		
 		//Delete the choose policy
 		doDelete(request, response);
-		printWriter.print("Delete a policy"+"<br>"+"<br>");
+		//printWriter.print("Delete a policy"+"<br>"+"<br>");
 		printWriter.print("<a href=\"index.jsp\">Back</a>");
 	}
 
