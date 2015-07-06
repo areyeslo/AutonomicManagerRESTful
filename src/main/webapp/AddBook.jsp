@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h1>Add a Book</h1>
-	<form action="monitor" method="Get">
+	<form action="AddBooks" method="Post">
 		Name:   <input type="text" name="name" />
 		<br /><br />
 		Author: <input type="text" name="author" />
