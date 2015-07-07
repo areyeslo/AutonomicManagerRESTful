@@ -67,12 +67,13 @@ public class Monitor extends HttpServlet {
         }*/
 		
 		//Delete books before inserting
-		boolean delete= db.deleteAllTmpBooks();
+		//boolean delete= db.deleteAllTmpBooks();
 		
 		//Insert books in knowledge database
 		boolean resp=db.InsertBooks(books);
 		
-		if (resp && delete){
+		//if (resp && delete){
+		if(resp){
 			//request.setAttribute("books",books);
 			printWriter.println("Books were retrieve from Library and they are stored in Knowledge Base for analysis");
 			printWriter.println("</body></html>"); 

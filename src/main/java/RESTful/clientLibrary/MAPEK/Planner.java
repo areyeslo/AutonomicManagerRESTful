@@ -33,15 +33,20 @@ public class Planner extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html");
 		PrintWriter printWriter = response.getWriter();
 		
 		KnowledgeDB db= new KnowledgeDB();
 		BackupDB backup= new BackupDB();
+		Executer exec = new Executer();
+		boolean done=false;
+		
+		List<Book> booksByYear= (List<Book>) request.getAttribute("booksTmp");
 		int deleteBook = (int) request.getAttribute("deleteBooks");
 		int yearBook = (int) request.getAttribute("year");
 
 		//Recover n books by specific year and backup
-		List<Book> booksByYear= db.queryTmpBookByYear(yearBook);
+		//List<Book> booksByYear= db.queryTmpBookByYear(yearBook);
 		List<Book> booksBck = new ArrayList<>();
 		
 		for(Book book : booksByYear) {
@@ -65,9 +70,22 @@ public class Planner extends HttpServlet {
 		 * 2.- Insert indicated books in the backup table
 		 * 3.- Delete indicated books in the library database. 
 		 */
+		
+		done=true;
 		//Send control to the executer to apply this Actions
-		request.setAttribute("books",booksBck);		
-		request.getRequestDispatcher("Executer").forward(request,response);
+		request.setAttribute("books",booksBck);
+		request.setAttribute("done", done);
+		System.out.println("Planner finished. Sending to Executer...");
+		
+		
+		if(!response.isCommitted()){
+			request.getRequestDispatcher("Executer").forward(request,response);
+		}
+		else{
+			exec.doGet(request, response);
+		}
+		 
+			
 		
 	}
 

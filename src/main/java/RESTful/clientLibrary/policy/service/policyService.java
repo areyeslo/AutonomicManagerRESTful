@@ -7,7 +7,7 @@ import java.util.List;
 
 public class policyService {
 	
-	private static policyDB PolicyStore = new policyDB();
+	private static KnowledgeDB PolicyStore = new KnowledgeDB();
 	
 	public List<Policy> getAllPolicies(){
 		List<Policy> allPolicies = PolicyStore.query();

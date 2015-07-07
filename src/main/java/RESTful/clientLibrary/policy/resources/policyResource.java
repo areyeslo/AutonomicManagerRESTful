@@ -24,7 +24,8 @@ import RESTful.clientLibrary.policy.service.policyService;
  */
 @Path("/policy")
 public class policyResource {
-	policyDB db = new policyDB();
+	//policyDB db = new policyDB();
+	KnowledgeDB db = new KnowledgeDB();
 	policyService PolicyService = new policyService();
 	
 	

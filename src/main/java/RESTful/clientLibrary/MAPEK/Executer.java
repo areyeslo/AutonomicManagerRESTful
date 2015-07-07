@@ -43,6 +43,7 @@ public class Executer extends HttpServlet {
 		 * 2.- Insert indicated books in the backup table
 		 * 3.- Delete indicated books in the library database. 
 		 */
+		response.setContentType("text/html");
 		PrintWriter printWriter = response.getWriter();
 		KnowledgeDB knDB = new KnowledgeDB();
 		printWriter.println("<html><body>Executer  takes actions to recover space in Database: <br>");
@@ -58,6 +59,7 @@ public class Executer extends HttpServlet {
             try {
             	//Backup the book
             	String idB= String.valueOf(id);
+            	bckDB.deleteBackupYear(year);
 				bckDB.insertBook(id, name, author, publisher, year);
 				//Delete the book in the library
 				request.setAttribute("id", idB);
@@ -70,14 +72,7 @@ public class Executer extends HttpServlet {
 				e.printStackTrace();
 			}
         }
-		try {
-		knDB.deleteAllTmpBooks();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		printWriter.println("</body></html>"); 
+		printWriter.println("</body></html>");		
 		System.out.println("Finish executer.");
 		
 	}

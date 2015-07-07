@@ -45,6 +45,17 @@
     <servlet-name>AddPolicy</servlet-name>
     <url-pattern>/AddPolicy</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>AddBooks</display-name>
+    <servlet-name>AddBooks</servlet-name>
+    <servlet-class>RESTful.clientLibrary.book.service.AddBooks</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddBooks</servlet-name>
+    <url-pattern>/AddBooks</url-pattern>
+  </servlet-mapping>
   <servlet>
     <description></description>
     <display-name>DeletePolicy</display-name>

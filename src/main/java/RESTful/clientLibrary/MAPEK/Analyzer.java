@@ -39,7 +39,7 @@ public class Analyzer extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		response.setContentType("text/html");
 		
 		PrintWriter printWriter = response.getWriter();
 		KnowledgeDB db = new KnowledgeDB();
@@ -84,14 +84,22 @@ public class Analyzer extends HttpServlet {
 					
 					request.setAttribute("deleteBooks", deleteBooks);
 					request.setAttribute("year", year);
-
+					request.setAttribute("booksTmp", booksTmp);
+					
+					//Delete Temporal Books by this Year
+					db.deleteTmpBooksByYear(year);
+					
 					//create an object of RequestDispatcher 
 					RequestDispatcher rd = request.getRequestDispatcher("Planner"); 
 					
 					// send the client data available
 					rd.include(request, response);
+										
 					
-					//boolean done= (boolean) request.getAttribute("done");
+					boolean done= (boolean) request.getAttribute("done");
+					
+					System.out.println("Analyzer has done.");
+
 				}
 				
 				

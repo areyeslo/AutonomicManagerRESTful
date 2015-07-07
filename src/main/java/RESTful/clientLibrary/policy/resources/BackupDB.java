@@ -30,13 +30,12 @@ public class BackupDB {
 				
 				stmt = c.createStatement();
 				String sql_tmp = "CREATE TABLE BACKUP " +
-						"(ID 			  INTEGER," +
-						" NAME            CHAR(50)," +
-						" AUTHOR          CHAR(50),"+
-						" YEAR            INTEGER,"+
-						" PUBLISHER       CHAR(50))"; 
+						"(ID 			  INTEGER NOT NULL UNIQUE," +
+						" NAME            CHAR(50) NOT NULL," +
+						" AUTHOR          CHAR(50) NOT NULL,"+
+						" YEAR            INTEGER  NOT NULL,"+
+						" PUBLISHER       CHAR(50) NOT NULL)"; 
 				stmt.executeUpdate(sql_tmp);
-							
 				stmt.close();
 				c.close();
 			} catch (Exception e) {
@@ -151,6 +150,56 @@ public class BackupDB {
 			}
 		}
 		System.out.println("All Books deleted");
+		return true;
+	}
+	
+	public boolean deleteBackup(int id) {
+		Connection c = null;
+		c = accessDB();
+		if (c != null) {
+			try {
+				c.setAutoCommit(false);
+				Statement stmt = null;
+				// Execute a query
+				stmt = c.createStatement();
+				String sql = "DELETE FROM BACKUP WHERE ID="+id+";";
+				stmt.executeUpdate(sql);
+				c.commit();
+
+				stmt.close();
+				c.close();
+			} catch ( Exception e ) {
+				// Handle errors for Class.forName
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				return false;
+			}
+		}
+		System.out.println("All Books deleted");
+		return true;
+	}
+	
+	public boolean deleteBackupYear(int year) {
+		Connection c = null;
+		c = accessDB();
+		if (c != null) {
+			try {
+				c.setAutoCommit(false);
+				Statement stmt = null;
+				// Execute a query
+				stmt = c.createStatement();
+				String sql = "DELETE FROM BACKUP WHERE YEAR="+year+";";
+				stmt.executeUpdate(sql);
+				c.commit();
+
+				stmt.close();
+				c.close();
+			} catch ( Exception e ) {
+				// Handle errors for Class.forName
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				return false;
+			}
+		}
+		//System.out.println("All Books deleted");
 		return true;
 	}
 	

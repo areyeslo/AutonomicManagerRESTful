@@ -32,11 +32,11 @@ public class KnowledgeDB {
 				
 				stmt = c.createStatement();
 				String sql_tmp = "CREATE TABLE BOOKS_TMP " +
-						"(ID 			  INTEGER," +
-						" NAME            CHAR(50)," +
-						" AUTHOR          CHAR(50),"+
-						" YEAR            INTEGER,"+
-						" PUBLISHER       CHAR(50))"; 
+						"(ID 			  INTEGER  NOT NULL UNIQUE," +
+						" NAME            CHAR(50) NOT NULL UNIQUE," +
+						" AUTHOR          CHAR(50) NOT NULL UNIQUE,"+
+						" YEAR            INTEGER  NOT NULL UNIQUE,"+
+						" PUBLISHER       CHAR(50) NOT NULL UNIQUE)"; 
 				stmt.executeUpdate(sql_tmp);
 
 				// Execute a query
@@ -66,7 +66,7 @@ public class KnowledgeDB {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\knowledgeDB.db");
 //			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
-			System.out.println("Access Granted."); 
+			//System.out.println("Access Granted."); 
 			
 		} catch (Exception e) {
 			// Handle errors for Class.forName and handle errors for JDBC
@@ -224,6 +224,9 @@ public class KnowledgeDB {
 		
 	}
 	
+	/********************************************
+	 * Section of Temporal Books
+	 ********************************************/
 		
 	/** Query all books
 	 * @param 
@@ -305,6 +308,31 @@ public class KnowledgeDB {
 				// Execute a query
 				stmt = c.createStatement();
 				String sql = "DELETE FROM BOOKS_TMP;";
+				stmt.executeUpdate(sql);
+				c.commit();
+
+				stmt.close();
+				c.close();
+			} catch ( Exception e ) {
+				// Handle errors for Class.forName
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				return false;
+			}
+		}
+		System.out.println("All Books deleted in temporal table");
+		return true;
+	}
+	
+	public boolean deleteTmpBooksByYear(int year) {
+		Connection c = null;
+		c = accessDB();
+		if (c != null) {
+			try {
+				c.setAutoCommit(false);
+				Statement stmt = null;
+				// Execute a query
+				stmt = c.createStatement();
+				String sql = "DELETE FROM BOOKS_TMP WHERE year="+year+ ";";
 				stmt.executeUpdate(sql);
 				c.commit();
 

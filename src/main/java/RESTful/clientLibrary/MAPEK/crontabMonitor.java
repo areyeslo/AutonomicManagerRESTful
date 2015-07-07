@@ -4,11 +4,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.servlet.http.HttpServlet;
+import javax.ws.rs.Path;
 
 
-//@Path("/crontab")
+@Path("/crontabMonitor")
 public class crontabMonitor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
 
 	private Timer timer;
     /**
@@ -22,7 +24,8 @@ public class crontabMonitor extends HttpServlet {
 			@Override
 			public void run()
 			{
-				System.out.print("Test");// TODO: we need to replace it with an appropriate function 
+				System.out.print("Test");// TODO: we need to replace it with an appropriate function
+				
 			}
 		}, 5*60*1000, 5*60*1000);
     }
