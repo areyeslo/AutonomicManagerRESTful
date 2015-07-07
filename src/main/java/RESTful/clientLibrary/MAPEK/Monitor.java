@@ -13,6 +13,8 @@ import com.sun.jersey.api.client.WebResource;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -29,12 +31,20 @@ import javax.ws.rs.core.MediaType;
 @Path("/monitor")
 public class Monitor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private Timer timer;
     /**
      * Default constructor. 
      */
     public Monitor() {
-        
+    	timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
+
+			@Override
+			public void run()
+			{
+				System.out.print("Test");// TODO: we need to replace it with an appropriate function 
+			}
+		}, 5*60*1000, 5*60*1000);
     }
 
 	/**
