@@ -9,11 +9,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import RESTful.clientLibrary.policy.model.*;
+import RESTful.clientLibrary.policy.model.Book;
+import RESTful.clientLibrary.policy.model.Policy;
 
-public class policyDB {
-	
-	public policyDB() {
+
+public class KnowledgeDB {
+	public KnowledgeDB() {
 		Connection c = null;
 		c = accessDB();
 		if (c != null) {
@@ -21,27 +22,37 @@ public class policyDB {
 			try {
 				DatabaseMetaData md = c.getMetaData();
 				ResultSet rs = md.getTables(null, null, "%", null);
+				
 				while (rs.next()) {
-					if (rs.getString(3).equals("POLICIES")) {
+					if ((rs.getString(3).equals("POLICIES"))|| (rs.getString(3).equals("BOOK_TMP"))){
 						c.close();	 
 						return;
 					}
 				}
+				
+				stmt = c.createStatement();
+				String sql_tmp = "CREATE TABLE BOOKS_TMP " +
+						"(ID 			  INTEGER," +
+						" NAME            CHAR(50)," +
+						" AUTHOR          CHAR(50),"+
+						" YEAR            INTEGER,"+
+						" PUBLISHER       CHAR(50))"; 
+				stmt.executeUpdate(sql_tmp);
 
 				// Execute a query
-				stmt = c.createStatement();
 				String sql = "CREATE TABLE POLICIES " +
 						"(ID INTEGER PRIMARY KEY   AUTOINCREMENT   NOT NULL," +
 						" MAX_BOOKS   INT  NOT NULL UNIQUE," +
 						" YEAR_BOOK   INT  NOT NULL,"+
 						" ACTIVATE    INT  NOT NULL);"; 
 				stmt.executeUpdate(sql);
+				
 				stmt.close();
 				c.close();
 			} catch (Exception e) {
 				// Handle errors for Class.forName and handle errors for JDBC 
 				System.err.println( e.getClass().getName() + ": " + e.getMessage() );	      
-				System.exit(0);
+				//System.exit(0);
 			}
 		}
 	}
@@ -53,7 +64,7 @@ public class policyDB {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\policy.db");
+			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\knowledgeDB.db");
 //			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
 			System.out.println("Access Granted."); 
 			
@@ -212,6 +223,139 @@ public class policyDB {
 		return true;
 		
 	}
+	
+		
+	/** Query all books
+	 * @param 
+	 * @return all books  
+	 */	
+	public List<Book> queryTmpBooks(){
+		List<Book> results = new ArrayList<>();
+		Connection c = null; 
+		c = accessDB();
+		if (c != null){
+			try{
+				ResultSet rs=null;				 
+				Statement stmt = c.createStatement();
+				rs = stmt.executeQuery( "SELECT id,name,author,year,publisher FROM BOOKS_TMP order by year, id asc;" );								
+				while ( rs.next() ) {
+					//Get record from cursor
+					int id = rs.getInt("id");
+					String  name = rs.getString("name");
+					String author  = rs.getString("author");
+					int year = rs.getInt("year");
+					String publisher = rs.getString("publisher");
+					Book b= new Book(id,name,author,year,publisher);                
+					//add the record into the list
+					results.add(b);
+				}
 
+				rs.close();
+				stmt.close();
+				c.close();
+			}catch ( Exception e ) {
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				System.exit(0);
+			}
+		}  
+		return results;
+
+	}
+	
+	public List<Book> queryTmpBookByYear(int year) {
+		// TODO Auto-generated method stub
+		List<Book> bookYear = new ArrayList<>();
+		Connection c = null; 
+		c = accessDB();
+		if (c != null){
+			try{
+				ResultSet rs = null;				 
+				Statement stmt = c.createStatement();
+				rs = stmt.executeQuery( "SELECT * FROM BOOKS_TMP WHERE YEAR='"+year+"'"+" order by year, id asc;" );								
+				while ( rs.next() ) {
+					//Get record from cursor
+					int id = rs.getInt("id");
+					String  name = rs.getString("name");
+					String author  = rs.getString("author");
+					String publisher = rs.getString("publisher");
+					Book b= new Book(id,name,author,year,publisher);                
+					//add the record into the list
+					bookYear.add(b);
+				}
+
+				rs.close();
+				stmt.close();
+				c.close();
+			}catch ( Exception e ) {
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				System.exit(0);
+			}
+			
+		}
+		return bookYear;
+	}
+	
+	public boolean deleteAllTmpBooks() {
+		Connection c = null;
+		c = accessDB();
+		if (c != null) {
+			try {
+				c.setAutoCommit(false);
+				Statement stmt = null;
+				// Execute a query
+				stmt = c.createStatement();
+				String sql = "DELETE FROM BOOKS_TMP;";
+				stmt.executeUpdate(sql);
+				c.commit();
+
+				stmt.close();
+				c.close();
+			} catch ( Exception e ) {
+				// Handle errors for Class.forName
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				return false;
+			}
+		}
+		System.out.println("All Books deleted in temporal table");
+		return true;
+	}
+	
+	public boolean InsertBooks(List<Book> temporalBooks){
+		Connection c = null; 
+		c = accessDB();
+		int id=0;
+		String name=null;
+		String author=null;
+		String publisher=null;
+		int year=0;
+	    
+		try{
+			c.setAutoCommit(false);
+			Statement stmt = c.createStatement();
+			for(Book book : temporalBooks) {
+                System.out.println("ID: "+book.getId()+"Name: "+book.getName()+"Author: "+book.getAuthor()+"Publisher: "+book.getPublisher()+"Year: "+book.getYear());
+				// Execute a query
+                id=book.getId();
+                name=book.getName();
+                author=book.getAuthor();
+                publisher=book.getPublisher();
+                year=book.getYear();				
+				String sql = "INSERT OR REPLACE INTO BOOKS_TMP (ID,NAME,AUTHOR,YEAR,PUBLISHER) VALUES ( '"+ id +"', '" +name +"', '" + author + "', '" + year + "', '" + publisher + "' );";
+				stmt.executeUpdate(sql);
+				c.commit();
+			}
+			stmt.close();
+			c.close();
+        }
+	    catch ( Exception e ) {
+	    	// Handle errors for Class.forName
+	    	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	    	return false;
+	    }
+		
+		return true;
+
+	}
+	
 	
 }

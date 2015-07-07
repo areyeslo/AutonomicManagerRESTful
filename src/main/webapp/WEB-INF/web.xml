@@ -23,7 +23,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Monitor</servlet-name>
-    <url-pattern>/monitor</url-pattern>
+    <url-pattern>/Monitor</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -84,15 +84,5 @@
   <servlet-mapping>
     <servlet-name>Executer</servlet-name>
     <url-pattern>/Executer</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>AddBooks</display-name>
-    <servlet-name>AddBooks</servlet-name>
-    <servlet-class>RESTful.clientLibrary.book.service.AddBooks</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AddBooks</servlet-name>
-    <url-pattern>/AddBooks</url-pattern>
   </servlet-mapping>
 </web-app>

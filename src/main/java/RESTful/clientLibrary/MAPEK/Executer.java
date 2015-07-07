@@ -2,6 +2,7 @@ package RESTful.clientLibrary.MAPEK;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +14,11 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import RESTful.clientLibrary.policy.model.Book;
 import RESTful.clientLibrary.policy.model.DataObject;
+import RESTful.clientLibrary.policy.model.Policy;
+import RESTful.clientLibrary.policy.resources.BackupDB;
+import RESTful.clientLibrary.policy.resources.KnowledgeDB;
 
 /**
  * Servlet implementation class Executer
@@ -33,52 +38,48 @@ public class Executer extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// extract form data
-		String bookName = request.getParameter("name");
-		String authorName = request.getParameter("author");
-		String yearBook = request.getParameter("year");
-		String publisherBook = request.getParameter("publisher");
-
+		/*Actions to be taken by the Executer:
+		 * 1.- Delete indicated books in the list from temporal table
+		 * 2.- Insert indicated books in the backup table
+		 * 3.- Delete indicated books in the library database. 
+		 */
 		PrintWriter printWriter = response.getWriter();
+		KnowledgeDB knDB = new KnowledgeDB();
+		printWriter.println("<html><body>Executer  takes actions to recover space in Database: <br>");
+		BackupDB bckDB = new BackupDB();
+		List<Book> booksUpdate = (List<Book>) request.getAttribute("books");
 		
-		DataObject obj = new DataObject(bookName, authorName, yearBook, publisherBook);
-		Gson gson = new Gson();
-		String jsonString = gson.toJson(obj);
-		System.out.println(jsonString);
-
-		Client client = Client.create();
-
-		WebResource webResource = client.resource("http://localhost:8080/library/webapi/books");
-
-		// POST method
-		ClientResponse rs = webResource.accept("application/json")
-				.type("application/json").post(ClientResponse.class, jsonString);
-
-		// check response status code
-		if (rs.getStatus() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : "
-					+ rs.getStatus());
+		for(Book book : booksUpdate) {
+			int id= book.getId();
+            String name= book.getName();
+            String author= book.getAuthor();
+            String publisher = book.getPublisher();
+            int year= book.getYear();
+            try {
+            	//Backup the book
+            	String idB= String.valueOf(id);
+				bckDB.insertBook(id, name, author, publisher, year);
+				//Delete the book in the library
+				request.setAttribute("id", idB);
+	        	doDelete(request, response);
+	        	printWriter.println("<li>Backup the book "+name+" of the year "+ year+" written by "+ author +"<br></li><br>");
+	        	printWriter.println("<li>Deleted the book "+name+" of the year "+ year+" written by "+ author +"<br></li><br>");	        	
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+		try {
+		knDB.deleteAllTmpBooks();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		// display response
-		String output = rs.getEntity(String.class);
-		System.out.println("Output from Server .... ");
-		System.out.println(output + "\n");
-
-		//				PrintWriter printWriter = response.getWriter();
-		printWriter.println("<h1>The book is added currently</h1>");
-
-		if (rs.getStatus() != 200){
-			printWriter.println("<html><body>Sorry, Failed : HTTP error code :"+rs.getStatus()+"<br>");
-		}else{
-			obj = gson.fromJson(output, DataObject.class);
-
-			printWriter.println("<html><body><br>");
-			printWriter.println("ID: "+obj.getID()+"<br>"+"Name: "+obj.getName()+"<br>"+
-					"Author: "+obj.getAuthor()+"<br>"+"Publisher: "+obj.getPublisher()+"<br>"+ 
-					"Year: "+obj.getYear()+"<br><br>");
-		}
-		printWriter.println("</body></html>");
-		printWriter.print("<a href=\"index.jsp\">Back</a>");
+		
+		printWriter.println("</body></html>"); 
+		System.out.println("Finish executer.");
+		
 	}
 
 	/**
@@ -86,6 +87,34 @@ public class Executer extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+	}
+	
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter printWriter = response.getWriter();  
+		response.setContentType("text/html");
+				
+		String id = (String) request.getAttribute("id");
+		if (id == null) return;
+		
+		Client client= Client.create();
+		WebResource webResource= client.resource("http://localhost:8080/library/webapi/books/"+id);
+
+		ClientResponse rs = webResource.accept("application/json")
+				.type("application/json").delete(ClientResponse.class);
+		
+		// check response status code
+		if (rs.getStatus() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ rs.getStatus());
+		}
+		
+		// display response
+		String output = rs.getEntity(String.class);
+		
+		printWriter.println("<script type=\"text/javascript\">");  
+		printWriter.println("alert('Books is deleted!');");  
+		printWriter.println("</script>");
+		
 	}
 
 }

@@ -2,7 +2,10 @@ package RESTful.clientLibrary.MAPEK;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +17,9 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import RESTful.clientLibrary.policy.model.Book;
 import RESTful.clientLibrary.policy.model.Policy;
+import RESTful.clientLibrary.policy.resources.KnowledgeDB;
 
 /**
  * Servlet implementation class Analyzer
@@ -37,15 +42,10 @@ public class Analyzer extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		PrintWriter printWriter = response.getWriter();
-		int overLimit = 0;
-
-		String numberBooks = (String) request.getAttribute("sizeList");
-		String year= (String)request.getAttribute("year");
-		//printWriter.print("The number of books by year is: " + numberBooks);
-		//printWriter.print("The year of books is: " + year);
+		KnowledgeDB db = new KnowledgeDB();
 		
 		Client client= Client.create();
-		WebResource webResource= client.resource("http://localhost:8080/clientLibrary/webapi/policy/year/" + year);
+		WebResource webResource= client.resource("http://localhost:8080/clientLibrary/webapi/policy");
 		                             
 		ClientResponse rs=webResource.accept(
 		           MediaType.APPLICATION_JSON_TYPE,
@@ -54,31 +54,52 @@ public class Analyzer extends HttpServlet {
 		
 		String jsonPolicy=rs.getEntity(String.class);		
 		Gson gson = new Gson();
-		Policy policy = gson.fromJson(jsonPolicy, Policy.class);
+		Policy[] PolicyA = gson.fromJson(jsonPolicy, Policy[].class);
+		List<Policy> policies = Arrays.asList(PolicyA);
 		
-		printWriter.println("<li>"+"ID: "+policy.getId()+"<br>"+"Max Number of Books: "+policy.getMax_books()+"<br>"+"Year of Book: "+policy.getYear_book()+"<br>"+"Activated: "+policy.getActivate()+"<br></li><br>");
-		//Go to DataBase Policy and query the year and the number of books
+		for(Policy policy : policies) {
+			System.out.println(policy.getId()+" "+policy.getMax_books()+", "+policy.getYear_book()+", "+ policy.getActivate());
+			//For each policy decide if you need to react to fix policy:
+			int id= policy.getId();
+			int maxBooks= policy.getMax_books();
+			int year= policy.getYear_book();
+			int activate=policy.getActivate();
+			
+			//Check possible symptom if the policy is activated
+			if (activate!= 0){
+				//Get the number of books by the policy year
+				List<Book> booksTmp = db.queryTmpBookByYear(year);
+				for(Book book : booksTmp) {
+		            System.out.println(book.getId()+" "+book.getName()+", "+book.getAuthor()+", "+book.getAuthor()+", "+ book.getYear());
+		        }
+				int numBooks= booksTmp.size();
+				if (numBooks > maxBooks){
+					//Backup books and Delete
+					System.out.println("Go to Planner");
+					
+					
+					int deleteBooks = numBooks-maxBooks;
+					
+					System.out.println("Planner would delete "+ deleteBooks + " books for the year " + year + " to make space in DB." );
+					
+					request.setAttribute("deleteBooks", deleteBooks);
+					request.setAttribute("year", year);
+
+					//create an object of RequestDispatcher 
+					RequestDispatcher rd = request.getRequestDispatcher("Planner"); 
+					
+					// send the client data available
+					rd.include(request, response);
+					
+					//boolean done= (boolean) request.getAttribute("done");
+				}
+				
+				
+			}
 		
-		int activate=policy.getActivate();
-		int maxBooks=Integer.parseInt(numberBooks);				
-		int maxBooksPolicy= policy.getMax_books();
-		
-		if (maxBooks<maxBooksPolicy || activate ==0 ){
-			overLimit=0;
-			printWriter.println("There are space for one more book. The overLimit value is: "+ overLimit );
-		}else{
-			overLimit=1;
-			printWriter.println("There is no more space for books. Delete one book for the same year.");
-			printWriter.println("The overLimit value is: "+overLimit);
 		}
+		printWriter.println("Analyzer has finished to check all policies.");
 		
-		/*Sending the value overLimit to planner
-		 * overLimit=0 , we can insert the book
-		 * overLimit=1 , there is no more space for the book
-		 */
-		System.out.println("Go to Planner");
-		request.setAttribute("overLimit",overLimit);
-		request.getRequestDispatcher("/Planner").forward(request,response);
 	}
 
 	/**
