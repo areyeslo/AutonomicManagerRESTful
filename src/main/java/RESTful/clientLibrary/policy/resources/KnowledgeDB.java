@@ -32,18 +32,18 @@ public class KnowledgeDB {
 				
 				stmt = c.createStatement();
 				String sql_tmp = "CREATE TABLE BOOKS_TMP " +
-						"(ID 			  INTEGER  NOT NULL UNIQUE," +
-						" NAME            CHAR(50) NOT NULL UNIQUE," +
-						" AUTHOR          CHAR(50) NOT NULL UNIQUE,"+
-						" YEAR            INTEGER  NOT NULL UNIQUE,"+
-						" PUBLISHER       CHAR(50) NOT NULL UNIQUE)"; 
+						"(ID 			  INTEGER  NOT NULL," +
+						" NAME            CHAR(50) NOT NULL," +
+						" AUTHOR          CHAR(50) NOT NULL,"+
+						" YEAR            INTEGER  NOT NULL,"+
+						" PUBLISHER       CHAR(50) NOT NULL)"; 
 				stmt.executeUpdate(sql_tmp);
 
 				// Execute a query
 				String sql = "CREATE TABLE POLICIES " +
 						"(ID INTEGER PRIMARY KEY   AUTOINCREMENT   NOT NULL," +
-						" MAX_BOOKS   INT  NOT NULL UNIQUE," +
-						" YEAR_BOOK   INT  NOT NULL,"+
+						" MAX_BOOKS   INT  NOT NULL," +
+						" YEAR_BOOK   INT  NOT NULL UNIQUE,"+
 						" ACTIVATE    INT  NOT NULL);"; 
 				stmt.executeUpdate(sql);
 				
@@ -64,8 +64,8 @@ public class KnowledgeDB {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\knowledgeDB.db");
-//			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
+			//c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\knowledgeDB.db");
+			c = DriverManager.getConnection("jdbc:sqlite:knowledgeDB.db");
 			//System.out.println("Access Granted."); 
 			
 		} catch (Exception e) {

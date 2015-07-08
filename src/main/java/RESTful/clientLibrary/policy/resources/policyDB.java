@@ -32,8 +32,8 @@ public class policyDB {
 				stmt = c.createStatement();
 				String sql = "CREATE TABLE POLICIES " +
 						"(ID INTEGER PRIMARY KEY   AUTOINCREMENT   NOT NULL," +
-						" MAX_BOOKS   INT  NOT NULL UNIQUE," +
-						" YEAR_BOOK   INT  NOT NULL,"+
+						" MAX_BOOKS   INT  NOT NULL," +
+						" YEAR_BOOK   INT  NOT NULL UNIQUE,"+
 						" ACTIVATE    INT  NOT NULL);"; 
 				stmt.executeUpdate(sql);
 				stmt.close();
@@ -53,8 +53,8 @@ public class policyDB {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\policy.db");
-//			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
+//			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\policy.db");
+			c = DriverManager.getConnection("jdbc:sqlite:policy.db");
 			System.out.println("Access Granted."); 
 			
 		} catch (Exception e) {

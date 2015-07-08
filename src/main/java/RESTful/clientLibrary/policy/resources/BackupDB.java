@@ -50,7 +50,8 @@ public class BackupDB {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\backupDB.db");
+			c = DriverManager.getConnection("jdbc:sqlite:backupDB.db");
+			//c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\AutonomicManagerRESTful\\backupDB.db");
 			System.out.println("Access Granted."); 
 			
 		} catch (Exception e) {
